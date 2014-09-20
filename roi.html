@@ -1,0 +1,79 @@
+<html>
+ <head>
+  <title>Rate of Interest</title>
+  <script type="text/javascript">
+   var calc_rate_per_year = function(rm) {
+       var ry = (Math.pow((1.0 + rm/100.0), 12.0) - 1.0) * 100.0;
+       return ry;
+   }
+   var calc_rate_per_month = function(ry) {
+       var rm = (Math.pow((1.0 + ry/100.0), 1.0/12.0) - 1.0) * 100.0;
+       return rm;
+   }
+   var calc_months_to_double = function(rm) {
+       var dm = Math.log(2.0)/Math.log(1.0 + rm/100.0);
+       return dm;
+   }
+   var calc_rm_from_dm = function(dm) {
+       var rm = (Math.pow(2.0, 1.0/dm) - 1.0) * 100.0;
+       return rm;
+   }
+   var process_input = function() {
+       var input_unit = document.getElementById("input_unit").value;
+       var input_number = document.getElementById("input_number").value;
+       var rm = 0;
+       var ry = 0;
+       var dm = 0;
+       var dy = 0;
+       if(input_unit == "rate_pm") {
+           rm = input_number;
+           ry = calc_rate_per_year(rm);
+           dm = calc_months_to_double(rm);
+           dy = dm/12.0;
+       } else if(input_unit == "rate_py") {
+           ry = input_number;
+           rm = calc_rate_per_month(ry);
+           dm = calc_months_to_double(rm);
+           dy = dm/12.0;
+       } else if(input_unit == "months_to_double") {
+           dm = input_number;
+           dy = dm/12.0;
+           rm = calc_rm_from_dm(dm);
+           ry = calc_rate_per_year(rm);
+       } else if(input_unit == "years_to_double") {
+           dy = input_number;
+           dm = dy * 12.0;
+           rm = calc_rm_from_dm(dm);
+           ry = calc_rate_per_year(rm);
+       }
+       set_results(get_resp_string(rm, ry, dm, dy));       
+   }
+   var get_resp_string = function(rm, ry, dm, dy) {
+       var resp = "<table>" +
+                  "<tr><td>Rate % per month: </td><td>"+rm+"</td></tr>"+
+                  "<tr><td>Rate % per year: </td><td>"+ry+"</td></tr>"+
+                  "<tr><td>Months to double: </td><td>"+dm+"</td></tr>"+
+                  "<tr><td>Years to double: </td><td>"+dy+"</td></tr>"+
+                  "</table>";
+       return resp;
+   }
+   var set_results = function(text) {
+       var resElement = document.getElementById("results");
+       resElement.innerHTML = text;
+   }
+  </script>
+ </head>
+ <body>
+  <select name="input_unit" id="input_unit">
+   <option value="rate_pm">Rate % per month</option>
+   <option value="rate_py">Rate % per year</option>
+   <option value="months_to_double">Months to double</option>
+   <option value="years_to_double">Years to double</option>
+  </select>
+  <input type=text id="input_number" name=input_number />
+  <input type=button value="Calculate" onclick="process_input();" />
+  <div id="results">
+  </div>
+ </body>
+</html>
+
