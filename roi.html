@@ -1,7 +1,12 @@
 <html>
  <head>
   <title>Rate of Interest</title>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript">
+
+   // Load the Visualization API and the chart package.
+   google.load('visualization', '1.0', {'packages':['corechart']});
+  
    var calc_rate_per_year = function(rm) {
        var ry = (Math.pow((1.0 + rm/100.0), 12.0) - 1.0) * 100.0;
        return ry;
@@ -18,35 +23,43 @@
        var rm = (Math.pow(2.0, 1.0/dm) - 1.0) * 100.0;
        return rm;
    }
+   var amt_calculator_for_rate = function(rate) {
+       var calculate_amt = function(time) {
+           var amt = Math.pow((1.0 + rate/100.0), time);
+           return amt;
+       }
+       return calculate_amt;
+   }
    var process_input = function() {
        var input_unit = document.getElementById("input_unit").value;
-       var input_number = document.getElementById("input_number").value;
+       var input_rate = document.getElementById("input_rate").value;
        var rm = 0;
        var ry = 0;
        var dm = 0;
        var dy = 0;
        if(input_unit == "rate_pm") {
-           rm = input_number;
+           rm = input_rate;
            ry = calc_rate_per_year(rm);
            dm = calc_months_to_double(rm);
            dy = dm/12.0;
        } else if(input_unit == "rate_py") {
-           ry = input_number;
+           ry = input_rate;
            rm = calc_rate_per_month(ry);
            dm = calc_months_to_double(rm);
            dy = dm/12.0;
        } else if(input_unit == "months_to_double") {
-           dm = input_number;
+           dm = input_rate;
            dy = dm/12.0;
            rm = calc_rm_from_dm(dm);
            ry = calc_rate_per_year(rm);
        } else if(input_unit == "years_to_double") {
-           dy = input_number;
+           dy = input_rate;
            dm = dy * 12.0;
            rm = calc_rm_from_dm(dm);
            ry = calc_rate_per_year(rm);
        }
-       set_results(get_resp_string(rm, ry, dm, dy));       
+       set_results(get_resp_string(rm, ry, dm, dy));
+       draw_chart(ry, 20);
    }
    var get_resp_string = function(rm, ry, dm, dy) {
        var resp = "<table>" +
@@ -61,6 +74,31 @@
        var resElement = document.getElementById("results");
        resElement.innerHTML = text;
    }
+   var draw_chart = function(rate, time) {
+       var final_month_number = Math.ceil(time);
+       var amt_calculator = amt_calculator_for_rate(rate);
+
+       // Create the data table.
+       var data = new google.visualization.DataTable();
+       data.addColumn('number', 'Time');
+       data.addColumn('number', 'Amount');
+       for(index = 0; index <= final_month_number; index++) {
+           data.addRows([
+             [index, amt_calculator(index)]
+           ]);
+       }
+
+       // Set chart options
+       var options = {'title':'Returns for rate of interest '+rate+' %',
+                      'width':800,
+                      'height':600,
+                      vAxis:{title:'Amount'},
+                      hAxis:{title:'Time'},};
+
+       // Instantiate and draw our chart, passing in some options.
+       var chart = new google.visualization.LineChart(document.getElementById('result_chart'));
+       chart.draw(data, options);
+   }
   </script>
  </head>
  <body>
@@ -70,9 +108,11 @@
    <option value="months_to_double">Months to double</option>
    <option value="years_to_double">Years to double</option>
   </select>
-  <input type=text id="input_number" name=input_number />
+  <input type=text id="input_rate" name=input_rate />
   <input type=button value="Calculate" onclick="process_input();" />
   <div id="results">
+  </div>
+  <div id="result_chart">
   </div>
  </body>
 </html>
