@@ -117,7 +117,7 @@
   <div class="container">
    <h1>Interest Rate Convertor</h1>
    <h2>Input</h2>
-   <form role="form">
+   <form action="#" onsubmit="process_input(); return false;" role="form">
     <div class="form-group">
      <label for="input_unit">Input type</label>
      <select name="input_unit" id="input_unit" class="form-control">
@@ -132,7 +132,7 @@
      <input type=text id="input_rate" name=input_rate class="form-control" />
     </div>
     <div class="form-group">
-     <input type=button value="Convert & Show chart" onclick="process_input();" class="form-control" />
+     <input type=submit value="Convert & Show chart" class="form-control" />
     </div>
    </form>
    <h2>Results</h2>
