@@ -1,0 +1,80 @@
+<html>
+ <head>
+  <!-- Include meta tag to ensure proper rendering and touch zooming -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Include bootstrap stylesheets -->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <title>Talks with Ramana Maharshi</title>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+  </script>
+ </head>   
+ <body>
+   
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+   <div class="container">
+    <table>
+     <tr>
+      <td colspan=4><input type=text value="1" id="cur_talk_index" /></td>
+      <td><input type=button value="GO" id="goto_button" /></td>
+     </tr>
+     <tr>
+      <td><input type=button value="|&lt;" id="first_button" /></td>
+      <td><input type=button value="&lt;" id="prev_button" /></td>
+      <td><input type=button value="&gt;" id="next_button" /></td>
+      <td><input type=button value="&gt;|" id="last_button" /></td>
+      <td><input type=button value="???" id="random_button" /></td>
+     </tr>
+    </table>
+  </div> 
+ </nav>
+ 
+ <header style="padding: 50px 0">
+  <div class="container">
+   <h1>Talks with Ramana Maharshi</h1>
+  </div>
+ </header>
+ 
+ <div class="container">
+  <!-- <pre> -->
+   <div id="talk_text">
+   </div>
+  <!-- </pre> -->
+ </div>
+ 
+ <footer>
+  <div class="container">
+   <hr />
+  </div>
+ <footer>
+ 
+ 
+  <!-- JavaScript placed at the end of the document so the pages load faster -->
+  <!-- Optional: Include the jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <!-- Optional: Incorporate the Bootstrap JavaScript plugins -->
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="ramanatalk.js"></script>
+  <script type="text/javascript">
+   var TALKS_TEXT = new Object();
+   var RAMANA_TALK_PAGE_NAME = "ramanatalk.html";
+   var RAMANA_TALKS_TITLE = "Talks with Ramana Maharshi";
+   $(document).ready(function () {
+    //alert( "1 Ready called." );
+
+    setTimeout(init_talks, 0);
+
+    //$(window).resize(function(){
+    //   process_input();
+    //});
+   });
+   $("#first_button").click(first_talk);
+   $("#prev_button").click(prev_talk);
+   $("#next_button").click(next_talk);
+   $("#last_button").click(last_talk);
+   $("#goto_button").click(goto_talk);
+   $("#random_button").click(random_talk);
+   
+  </script> 
+ </body>
+</html>
